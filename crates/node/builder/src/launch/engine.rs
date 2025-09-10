@@ -333,6 +333,8 @@ where
                 }
             }
 
+            println!("HERE");
+
             let _ = exit.send(res);
         }));
 
