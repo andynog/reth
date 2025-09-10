@@ -333,8 +333,6 @@ where
                 }
             }
 
-            println!("HERE");
-
             let _ = exit.send(res);
         }));
 
@@ -361,7 +359,11 @@ where
 
         let handle = NodeHandle {
             node_exit_future: NodeExitFuture::new(
-                async { rx.await? },
+                async { 
+                    let res = rx.await;
+                    println!("{:?}", res);
+                    res?
+                },
                 full_node.config.debug.terminate,
             ),
             node: full_node,
