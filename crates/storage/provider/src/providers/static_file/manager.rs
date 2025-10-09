@@ -775,6 +775,13 @@ impl<N: NodePrimitives> StaticFileProvider<N> {
         };
 
         for segment in StaticFileSegment::iter() {
+            // Skip AccountChangeSets if no static files exist for it yet (backward compatibility)
+            if segment == StaticFileSegment::AccountChangeSets &&
+                self.get_highest_static_file_block(segment).is_none()
+            {
+                continue
+            }
+
             if provider.prune_modes_ref().has_receipts_pruning() && segment.is_receipts() {
                 // Pruned nodes (including full node) do not store receipts as static files.
                 continue
